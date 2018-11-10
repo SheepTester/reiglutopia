@@ -1,6 +1,7 @@
 const COLOURS = {
   grass: '#789e5a'
 };
+const TILE_SIZE = 60;
 
 let engine = new Worker('./engine/engine.js');
 engine.onmessage = ({data}) => {
@@ -32,6 +33,8 @@ let uiCanvas, uc;
 let dialogCanvas, dc;
 let dummyCanvas, xc;
 let tileData;
+
+let happyHouse;
 function init([_, images]) {
   tileData = images;
 
@@ -50,6 +53,8 @@ function init([_, images]) {
   prepCanvas();
   window.addEventListener('resize', prepCanvas);
 
+  happyHouse = replaceColours(tileData.smallHouse, 0xc19798, 0xe1e1ad);
+
   paint();
 }
 function prepCanvas() {
@@ -62,20 +67,12 @@ function prepCanvas() {
     context.msImageSmoothingEnabled = false;
     context.oImageSmoothingEnabled = false;
   });
-  paint(); // TEMP
 }
 
 function paint() {
   tc.fillStyle = COLOURS.grass;
   tc.fillRect(0, 0, tileCanvas.width, tileCanvas.height);
-  console.time();
-  function randomColour() {
-    return Math.floor(Math.random() * 0x1000000);
-  }
-  for (let i = 1000; i--;) {
-    tc.putImageData(replaceColours(tileData.smallHouse, randomColour(), randomColour()), (i % 30) * 40, Math.floor(i / 30) * 40);
-  }
-  console.timeEnd();
+  tc.putImageData(happyHouse, 0, 0);
 }
 
 function prepareImages() {
