@@ -1,3 +1,3 @@
 self.onmessage = ({data}) => {
-  console.log(data);
+  console.log("I'll do something later");
 };
